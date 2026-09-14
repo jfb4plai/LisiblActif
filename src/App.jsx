@@ -4,6 +4,7 @@ import Layout from './components/Layout'
 import Login from './pages/Login'
 import Analyseur from './pages/Analyseur'
 import ReecritureIA from './pages/ReecritureIA'
+import Historique from './pages/Historique'
 
 function AppRoutes() {
   const { user, loading } = useAuth()
@@ -27,6 +28,7 @@ function AppRoutes() {
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<Analyseur />} />
         <Route path="/reecriture" element={<ReecritureIA />} />
+        <Route path="/historique" element={<Historique />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </Layout>
