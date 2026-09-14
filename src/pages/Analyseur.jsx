@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { scoreKandelMoles, interpreterScore, decouperPhrases } from '../lib/lisibilite'
 import { detecterMotsHorsNiveau } from '../lib/manulex'
-import { tauxDecodabilite, graphemesJusquaEtape, PROGRESSION_CP_DEFAUT } from '../lib/decodabilite'
+import { tauxDecodabilite, graphemesJusquaEtape, PROGRESSION_GRAPHEMES_DEFAUT } from '../lib/decodabilite'
 import { NIVEAUX_PRIMAIRE, NIVEAUX_SECONDAIRE, seuilPhraseLongue, estNiveauPrecoce } from '../lib/constants'
 import { extractFile } from '../lib/extractFile'
 
@@ -12,7 +12,7 @@ export default function Analyseur() {
   const { state } = useLocation()
   const [texte, setTexte] = useState(state?.texte ?? '')
   const [niveau, setNiveau] = useState(state?.niveau ?? 'P4')
-  const [etapeCP, setEtapeCP] = useState(PROGRESSION_CP_DEFAUT.length)
+  const [etapeLecture, setEtapeLecture] = useState(PROGRESSION_GRAPHEMES_DEFAUT.length)
   const [erreurImport, setErreurImport] = useState('')
   const navigate = useNavigate()
 
@@ -43,12 +43,12 @@ export default function Analyseur() {
 
     let decodabilite = null
     if (estNiveauPrecoce(niveau)) {
-      const graphemes = graphemesJusquaEtape(etapeCP)
+      const graphemes = graphemesJusquaEtape(etapeLecture)
       decodabilite = tauxDecodabilite(texte, graphemes)
     }
 
     return { score, label: interpreterScore(score), phrasesLongues, motsHorsNiveau, decodabilite }
-  }, [texte, niveau, etapeCP, texteTropCourt, nbMots])
+  }, [texte, niveau, etapeLecture, texteTropCourt, nbMots])
 
   return (
     <div className="plai-section">
@@ -75,17 +75,17 @@ export default function Analyseur() {
 
       {estNiveauPrecoce(niveau) && (
         <div className="plai-field">
-          <label className="plai-label" htmlFor="etape-cp">
-            Sons/graphèmes déjà enseignés (étape {etapeCP}/{PROGRESSION_CP_DEFAUT.length})
+          <label className="plai-label" htmlFor="etape-lecture">
+            Sons/graphèmes déjà enseignés (étape {etapeLecture}/{PROGRESSION_GRAPHEMES_DEFAUT.length})
           </label>
           <input
-            id="etape-cp" name="etape-cp"
-            type="range" min={1} max={PROGRESSION_CP_DEFAUT.length} value={etapeCP}
-            onChange={e => setEtapeCP(Number(e.target.value))}
+            id="etape-lecture" name="etape-lecture"
+            type="range" min={1} max={PROGRESSION_GRAPHEMES_DEFAUT.length} value={etapeLecture}
+            onChange={e => setEtapeLecture(Number(e.target.value))}
             style={{ width: '100%' }}
           />
           <p style={{ fontSize: '13px', color: 'var(--text2)' }}>
-            Graphèmes connus : {graphemesJusquaEtape(etapeCP).join(', ')}. Réglez ce curseur sur la
+            Graphèmes connus : {graphemesJusquaEtape(etapeLecture).join(', ')}. Réglez ce curseur sur la
             progression réellement enseignée en classe — le taux de décodabilité ci-dessous n'est
             fiable que si cette liste correspond à ce que les élèves ont déjà appris.
           </p>

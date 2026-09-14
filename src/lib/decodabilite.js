@@ -5,8 +5,13 @@
 // (vérifié par WebFetch le 2026-09-14) : cette table de progression est
 // une construction propre à LisiblActif, éditable par l'enseignant dans
 // l'UI plutôt qu'importée depuis Anagraph.
+//
+// Nommage FWB : pas de "CP" (Cours Préparatoire, système français) — cette
+// progression couvre le début de l'apprentissage de la lecture en primaire
+// FWB (P1-P3, voir NIVEAUX_PRECOCES dans constants.js), sans être rattachée
+// à une seule année ; l'enseignant règle lui-même l'étape via le curseur.
 
-export const PROGRESSION_CP_DEFAUT = [
+export const PROGRESSION_GRAPHEMES_DEFAUT = [
   { etape: 1, graphemes: ['a', 'i', 'o', 'u', 'l', 'm', 'r'] },
   { etape: 2, graphemes: ['e', 't', 'p', 'n', 'f'] },
   { etape: 3, graphemes: ['s', 'd', 'c', 'v', 'ou'] },
@@ -15,14 +20,14 @@ export const PROGRESSION_CP_DEFAUT = [
   { etape: 6, graphemes: ['gn', 'ai', 'au', 'eau', 'ille'] },
 ]
 
-export function graphemesJusquaEtape(etape, progression = PROGRESSION_CP_DEFAUT) {
+export function graphemesJusquaEtape(etape, progression = PROGRESSION_GRAPHEMES_DEFAUT) {
   return progression
     .filter(p => p.etape <= etape)
     .flatMap(p => p.graphemes)
 }
 
 // Réduit le mot aux lettres a-z, accents retirés (comme les graphèmes de
-// PROGRESSION_CP_DEFAUT sont tous non accentués). Sans ça, "école" ne
+// PROGRESSION_GRAPHEMES_DEFAUT sont tous non accentués). Sans ça, "école" ne
 // pourrait jamais matcher le graphème "e" et serait à tort jugé
 // indécodable — même limitation que la normalisation utilisée dans
 // manulex.js, appliquée ici pour la même raison.

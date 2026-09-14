@@ -16,12 +16,12 @@ const REFERENCES = [
   },
   {
     titre: 'Boggio, C. & Bosse, M.-L. (2022)',
-    detail: "Le taux de décodabilité des textes est important pour l'apprentissage de la lecture au CP — socle scientifique du module de décodabilité (P1-P3).",
+    detail: "Le taux de décodabilité des textes est important pour l'apprentissage de la lecture au CP (système français — équivalent à la 1re primaire, P1, en FWB). Socle scientifique du module de décodabilité, applicable au primaire FWB P1-P3.",
     riss: 'hal-03811405',
   },
   {
     titre: 'Anagraph (ENS Lyon)',
-    detail: "Outil de calcul de décodabilité pour le CP. Réel, cité dans le corpus RISS (Deauvieau & Gioia, 2024, halshs-04855104). Pas d'API ni d'export public documenté — LisiblActif construit sa propre table de progression graphème-phonème dans le même esprit scientifique, éditable par l'enseignant.",
+    detail: "Outil français de calcul de décodabilité pour le CP (1re primaire en FWB). Réel, cité dans le corpus RISS (Deauvieau & Gioia, 2024, halshs-04855104). Pas d'API ni d'export public documenté — LisiblActif construit sa propre table de progression graphème-phonème dans le même esprit scientifique, adaptée au primaire FWB (P1-P3) et éditable par l'enseignant.",
     riss: 'halshs-04855104 (mention) — vérifié directement sur anagraph.ens-lyon.fr le 2026-09-14',
   },
 ]
