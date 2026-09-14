@@ -42,21 +42,24 @@ export default function Login() {
       </div>
 
       <div className="plai-card">
-        {error && <div className="plai-error">{error}</div>}
-        {success && <div className="plai-success">{success}</div>}
+        {error && <div className="plai-error" role="alert">{error}</div>}
+        {success && <div className="plai-success" role="alert">{success}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="plai-field">
-            <label className="plai-label">Email</label>
+            <label className="plai-label" htmlFor="email">Email</label>
             <input
+              id="email" name="email" autoComplete="email"
               className="plai-input" type="email" required
               value={email} onChange={e => setEmail(e.target.value)}
               placeholder="prenom.nom@etablissement.be"
             />
           </div>
           <div className="plai-field">
-            <label className="plai-label">Mot de passe</label>
+            <label className="plai-label" htmlFor="password">Mot de passe</label>
             <input
+              id="password" name="password"
+              autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
               className="plai-input" type="password" required
               value={password} onChange={e => setPassword(e.target.value)}
               placeholder="••••••••"
