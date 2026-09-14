@@ -36,8 +36,11 @@ export default function Analyseur() {
       <h2>Analyser un texte</h2>
 
       <div className="plai-field">
-        <label className="plai-label">Niveau cible</label>
-        <select className="plai-input" value={niveau} onChange={e => setNiveau(e.target.value)}>
+        <label className="plai-label" htmlFor="niveau-cible">Niveau cible</label>
+        <select
+          id="niveau-cible" name="niveau-cible"
+          className="plai-input" value={niveau} onChange={e => setNiveau(e.target.value)}
+        >
           <optgroup label="Primaire">
             {NIVEAUX_PRIMAIRE.map(n => <option key={n} value={n}>{n}</option>)}
           </optgroup>
@@ -45,46 +48,59 @@ export default function Analyseur() {
             {NIVEAUX_SECONDAIRE.map(n => <option key={n} value={n}>{n}</option>)}
           </optgroup>
         </select>
+        <p style={{ fontSize: '13px', color: 'var(--text2)', marginTop: '4px' }}>
+          Détermine le seuil de longueur de phrase toléré et la liste de vocabulaire de référence
+          utilisés pour signaler les phrases trop longues et les mots hors-niveau ci-dessous.
+        </p>
       </div>
 
       {estNiveauPrecoce(niveau) && (
         <div className="plai-field">
-          <label className="plai-label">
+          <label className="plai-label" htmlFor="etape-cp">
             Sons/graphèmes déjà enseignés (étape {etapeCP}/{PROGRESSION_CP_DEFAUT.length})
           </label>
           <input
+            id="etape-cp" name="etape-cp"
             type="range" min={1} max={PROGRESSION_CP_DEFAUT.length} value={etapeCP}
             onChange={e => setEtapeCP(Number(e.target.value))}
             style={{ width: '100%' }}
           />
           <p style={{ fontSize: '13px', color: 'var(--text2)' }}>
-            Graphèmes connus : {graphemesJusquaEtape(etapeCP).join(', ')}
+            Graphèmes connus : {graphemesJusquaEtape(etapeCP).join(', ')}. Réglez ce curseur sur la
+            progression réellement enseignée en classe — le taux de décodabilité ci-dessous n'est
+            fiable que si cette liste correspond à ce que les élèves ont déjà appris.
           </p>
         </div>
       )}
 
       <div className="plai-field">
-        <label className="plai-label">Texte à analyser</label>
+        <label className="plai-label" htmlFor="texte-a-analyser">Texte à analyser</label>
         <textarea
+          id="texte-a-analyser" name="texte-a-analyser"
           className="plai-input" rows={10}
           value={texte} onChange={e => setTexte(e.target.value)}
-          placeholder="Collez ici le texte de lecture ou de dictée à analyser (minimum 20 mots)…"
+          placeholder="Ex. : « Le petit chat noir dort sur le tapis du salon. Il attend que sa maîtresse rentre de l'école pour jouer avec sa balle rouge. »"
         />
+        <p style={{ fontSize: '13px', color: 'var(--text2)', marginTop: '4px' }}>
+          Collez le texte de lecture ou de dictée à évaluer (minimum {motsMin} mots). Il sert
+          uniquement au diagnostic ci-dessous — rien n'est enregistré tant que vous ne demandez pas
+          explicitement une réécriture et ne l'enregistrez pas dans l'historique.
+        </p>
       </div>
 
       {texteTropCourt && (
-        <div className="plai-error">Texte trop court ({nbMots} mots) — minimum {motsMin} mots pour un diagnostic fiable.</div>
+        <div className="plai-error" role="alert">Texte trop court ({nbMots} mots) — minimum {motsMin} mots pour un diagnostic fiable.</div>
       )}
 
       {diagnostic && (
-        <div className="plai-card">
+        <div className="plai-card" role="status" aria-live="polite">
           <p><strong>Score de lisibilité (Kandel-Moles) :</strong> {diagnostic.score} — {diagnostic.label}</p>
 
           {diagnostic.phrasesLongues.length > 0 && (
             <div>
               <strong>Phrases trop longues pour ce niveau :</strong>
               <ul>
-                {diagnostic.phrasesLongues.map((p, i) => <li key={i}>{p}</li>)}
+                {diagnostic.phrasesLongues.map((p, i) => <li key={`${i}-${p.slice(0, 20)}`}>{p}</li>)}
               </ul>
             </div>
           )}
