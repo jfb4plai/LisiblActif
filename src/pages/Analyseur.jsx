@@ -142,6 +142,13 @@ export default function Analyseur() {
             <p><strong>Mots probablement hors-niveau :</strong> {diagnostic.motsHorsNiveau.join(', ')}</p>
           )}
 
+          {diagnostic.motsHorsNiveau.length === 0 && !NIVEAUX_PRIMAIRE.slice(0, 3).includes(niveau) && (
+            <p style={{ fontSize: '13px', color: 'var(--text2)' }}>
+              Détection de mots hors-niveau non disponible pour ce niveau — le corpus de fréquence
+              lexicale (Manulex) ne couvre que le primaire jusqu'à P3.
+            </p>
+          )}
+
           {diagnostic.decodabilite !== null && (
             <p>
               <strong>Décodabilité (sons connus) :</strong> {diagnostic.decodabilite}%

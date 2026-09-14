@@ -6,7 +6,7 @@ const REFERENCES = [
   },
   {
     titre: 'Manulex — Lété, B., Sprenger-Charolles, L. & Colé, P. (2004)',
-    detail: 'Base de données de fréquence lexicale calculée sur 54 manuels scolaires français, utilisée pour détecter les mots hors-niveau.',
+    detail: "Base de données de fréquence lexicale calculée sur 54 manuels scolaires français (1,9 million de mots), corpus complet importé sous licence CC BY-NC-SA 3.0 (manulex.org), utilisée pour détecter les mots hors-niveau au primaire (P1-P3). Manulex ne couvre pas le secondaire : aucune détection de mots hors-niveau n'est possible sur un texte destiné à P4 et au-delà.",
     riss: 'Vérifié via Gala, François, Bernhard & Fairon (2014, hal-01001916) et Grossmann (2018, hal-04807000).',
   },
   {
