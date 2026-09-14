@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { scoreKandelMoles, interpreterScore, decouperPhrases } from '../lib/lisibilite'
 import { detecterMotsHorsNiveau } from '../lib/manulex'
 import { tauxDecodabilite, graphemesJusquaEtape, PROGRESSION_CP_DEFAUT } from '../lib/decodabilite'
@@ -8,6 +9,7 @@ export default function Analyseur() {
   const [texte, setTexte] = useState('')
   const [niveau, setNiveau] = useState('P4')
   const [etapeCP, setEtapeCP] = useState(PROGRESSION_CP_DEFAUT.length)
+  const navigate = useNavigate()
 
   const motsMin = 20
   const nbMots = texte.trim().split(/\s+/).filter(Boolean).length
@@ -119,6 +121,14 @@ export default function Analyseur() {
               )}
             </p>
           )}
+
+          <button
+            className="plai-btn"
+            style={{ marginTop: '1rem' }}
+            onClick={() => navigate('/reecriture', { state: { texte, niveau } })}
+          >
+            Proposer une réécriture adaptée
+          </button>
         </div>
       )}
     </div>

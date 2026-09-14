@@ -3,6 +3,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext'
 import Layout from './components/Layout'
 import Login from './pages/Login'
 import Analyseur from './pages/Analyseur'
+import ReecritureIA from './pages/ReecritureIA'
 
 function AppRoutes() {
   const { user, loading } = useAuth()
@@ -25,6 +26,7 @@ function AppRoutes() {
       <Routes>
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<Analyseur />} />
+        <Route path="/reecriture" element={<ReecritureIA />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </Layout>
