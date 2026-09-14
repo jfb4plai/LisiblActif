@@ -16,9 +16,19 @@ cp .env.example .env.local   # renseigner VITE_SUPABASE_URL et VITE_SUPABASE_ANO
 npm run dev
 ```
 
+Appliquer d'abord la migration `supabase/migrations/20260914000000_create_lisibl_tables.sql`
+sur le projet Supabase partagé (`dfoaumjleqtxjeaplnna`), sinon l'app charge
+mais aucune requête `lisibl_textes`/`lisibl_reecritures` ne fonctionnera.
+
 Le parcours de réécriture IA repose sur `/api/reecrire.js` : comme pour les
 autres apps PLAI, `npm run dev` seul ne fait pas tourner cette route —
 utiliser `vercel dev` pour la tester en local.
+
+## Tests
+
+```bash
+npm run test
+```
 
 ## Déploiement
 
