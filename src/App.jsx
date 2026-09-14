@@ -5,6 +5,7 @@ import Login from './pages/Login'
 import Analyseur from './pages/Analyseur'
 import ReecritureIA from './pages/ReecritureIA'
 import Historique from './pages/Historique'
+import References from './pages/References'
 
 function AppRoutes() {
   const { user, loading } = useAuth()
@@ -29,6 +30,7 @@ function AppRoutes() {
         <Route path="/dashboard" element={<Analyseur />} />
         <Route path="/reecriture" element={<ReecritureIA />} />
         <Route path="/historique" element={<Historique />} />
+        <Route path="/references" element={<References />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </Layout>
