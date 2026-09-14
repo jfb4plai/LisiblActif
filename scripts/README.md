@@ -4,7 +4,12 @@
 (Lété, Sprenger-Charolles & Colé, 2004), importé le 2026-09-14.
 
 - **Source** : [manulex.org/fr/downloads.html](https://www.manulex.org/fr/downloads.html)
-  — « Fichier Excel de Manulex » (`Manulex.xls`, ~18 Mo, feuille `LEMMES`).
+  — « Fichier Excel de Manulex » (`Manulex.xls`, ~18 Mo, feuille `FORMES ORTHO`
+  — PAS la feuille `LEMMES` : celle-ci lemmatise les verbes conjugués sous
+  leur infinitif, "est" y a une fréquence quasi nulle car compté sous "être" ;
+  `FORMES ORTHO` compte les formes telles qu'écrites, ce qu'il faut pour
+  comparer des mots d'un texte tel quel — piégé une première fois par cette
+  différence, voir le commentaire en tête du script).
 - **Licence** : Creative Commons BY-NC-SA 3.0 — usage non commercial, citer
   Lété, Sprenger-Charolles & Colé (2004) partout où ces données apparaissent
   (déjà fait sur `src/pages/References.jsx`), toute redistribution du jeu de
