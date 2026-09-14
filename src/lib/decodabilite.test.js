@@ -13,6 +13,17 @@ describe('motEstDecodable', () => {
   it('priorise les digraphes connus sur les lettres simples', () => {
     expect(motEstDecodable('chat', ['ch', 'a', 't'])).toBe(true)
   })
+
+  it('retire les accents avant de comparer aux graphèmes (tous non accentués)', () => {
+    expect(motEstDecodable('ecole', ['e', 'c', 'o', 'l'])).toBe(true)
+    expect(motEstDecodable('école', ['e', 'c', 'o', 'l'])).toBe(true)
+  })
+
+  it('rebrousse chemin quand le plus long préfixe mène à une impasse', () => {
+    // "ab" (glouton) laisserait "b" non reconnu ; "a" + "bb" est une
+    // segmentation valide que seul un algorithme avec retour en arrière trouve.
+    expect(motEstDecodable('abb', ['ab', 'bb', 'a'])).toBe(true)
+  })
 })
 
 describe('graphemesJusquaEtape', () => {

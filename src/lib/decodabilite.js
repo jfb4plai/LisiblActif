@@ -21,18 +21,40 @@ export function graphemesJusquaEtape(etape, progression = PROGRESSION_CP_DEFAUT)
     .flatMap(p => p.graphemes)
 }
 
+// Réduit le mot aux lettres a-z, accents retirés (comme les graphèmes de
+// PROGRESSION_CP_DEFAUT sont tous non accentués). Sans ça, "école" ne
+// pourrait jamais matcher le graphème "e" et serait à tort jugé
+// indécodable — même limitation que la normalisation utilisée dans
+// manulex.js, appliquée ici pour la même raison.
+function nettoyerMot(mot) {
+  return mot
+    .toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z]/g, '')
+}
+
+// Vérifie si `reste` peut être entièrement découpé en graphèmes connus.
+// Essaie CHAQUE graphème qui préfixe `reste` (pas seulement le plus long)
+// et rebrousse chemin si un choix mène à une impasse — un simple choix
+// glouton du plus long préfixe peut échouer sur un mot pourtant décodable
+// quand deux graphèmes connus partagent un préfixe (ex. graphèmes ['ab',
+// 'bb', 'a'] sur le mot "abb" : gloutonnement "ab" puis "b" échoue, alors
+// que "a" + "bb" est une segmentation valide).
+function peutSegmenter(reste, tokens, memo) {
+  if (reste.length === 0) return true
+  if (memo.has(reste)) return memo.get(reste)
+
+  const possible = tokens.some(t => reste.startsWith(t) && peutSegmenter(reste.slice(t.length), tokens, memo))
+  memo.set(reste, possible)
+  return possible
+}
+
 export function motEstDecodable(mot, graphemesConnus) {
-  const nettoye = mot.toLowerCase().replace(/[^a-zàâäéèêëïîôöùûüœæç]/g, '')
+  const nettoye = nettoyerMot(mot)
   if (!nettoye) return true
 
-  const tokens = [...graphemesConnus].sort((a, b) => b.length - a.length)
-  let reste = nettoye
-  while (reste.length > 0) {
-    const trouve = tokens.find(t => reste.startsWith(t))
-    if (!trouve) return false
-    reste = reste.slice(trouve.length)
-  }
-  return true
+  const tokens = [...new Set(graphemesConnus)].filter(Boolean)
+  return peutSegmenter(nettoye, tokens, new Map())
 }
 
 export function tauxDecodabilite(texte, graphemesConnus) {
