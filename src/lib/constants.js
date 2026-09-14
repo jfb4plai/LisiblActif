@@ -14,6 +14,8 @@ export function seuilPhraseLongue(niveau) {
   return SEUILS_PHRASE_LONGUE[niveau] ?? 15
 }
 
+export const NIVEAUX_PRECOCES = NIVEAUX_PRIMAIRE.slice(0, 3)
+
 export function estNiveauPrecoce(niveau) {
-  return ['P1', 'P2', 'P3'].includes(niveau)
+  return NIVEAUX_PRECOCES.includes(niveau)
 }

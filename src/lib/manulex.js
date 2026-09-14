@@ -10,7 +10,14 @@
 // export réel du corpus une fois obtenu sous licence académique.
 //
 // niveau = premier niveau scolaire où le mot est considéré comme fréquent.
-export const NIVEAUX_ORDRE = ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'S1', 'S2', 'S3', 'S4', 'S5', 'S6']
+//
+// NIVEAUX_ORDRE réexporte TOUS_NIVEAUX de constants.js (source unique pour
+// l'ordre des niveaux scolaires, partagée avec lib/constants.js) plutôt que
+// de dupliquer la liste ici — deux listes indépendantes auraient pu diverger
+// silencieusement si un niveau était ajouté/renommé.
+import { TOUS_NIVEAUX } from './constants'
+
+export const NIVEAUX_ORDRE = TOUS_NIVEAUX
 
 export const FREQUENCE_LEXICALE = {
   le: 'P1', la: 'P1', les: 'P1', un: 'P1', une: 'P1', et: 'P1', il: 'P1', elle: 'P1',
