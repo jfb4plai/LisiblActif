@@ -1,13 +1,16 @@
 import { useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { scoreKandelMoles, interpreterScore, decouperPhrases } from '../lib/lisibilite'
 import { detecterMotsHorsNiveau } from '../lib/manulex'
 import { tauxDecodabilite, graphemesJusquaEtape, PROGRESSION_CP_DEFAUT } from '../lib/decodabilite'
 import { NIVEAUX_PRIMAIRE, NIVEAUX_SECONDAIRE, seuilPhraseLongue, estNiveauPrecoce } from '../lib/constants'
 
 export default function Analyseur() {
-  const [texte, setTexte] = useState('')
-  const [niveau, setNiveau] = useState('P4')
+  // Réanalyse depuis l'historique : Historique.jsx navigue ici avec
+  // { texte, niveau } dans le state pour pré-remplir le formulaire.
+  const { state } = useLocation()
+  const [texte, setTexte] = useState(state?.texte ?? '')
+  const [niveau, setNiveau] = useState(state?.niveau ?? 'P4')
   const [etapeCP, setEtapeCP] = useState(PROGRESSION_CP_DEFAUT.length)
   const navigate = useNavigate()
 

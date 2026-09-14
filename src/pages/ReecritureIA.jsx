@@ -5,6 +5,15 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { scoreKandelMoles } from '../lib/lisibilite'
 
+// Titre affiché dans l'historique : première phrase (ou début du texte),
+// tronquée — l'enseignant ne saisit pas de titre séparément, ce texte doit
+// suffire à distinguer deux entrées dans la liste.
+function deriverTitre(texte) {
+  const premiereLigne = texte.trim().split(/[.!?\n]/)[0].trim()
+  const base = premiereLigne || texte.trim()
+  return base.length > 60 ? `${base.slice(0, 60)}…` : base
+}
+
 export default function ReecritureIA() {
   const location = useLocation()
   const navigate = useNavigate()
@@ -42,6 +51,7 @@ export default function ReecritureIA() {
       .from('lisibl_textes')
       .insert({
         user_id: user.id,
+        titre: deriverTitre(texte),
         texte_original: texte,
         niveau_cible: niveau,
         score_lisibilite: scoreKandelMoles(texte),
