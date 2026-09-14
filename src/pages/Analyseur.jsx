@@ -142,9 +142,11 @@ export default function Analyseur() {
             <div>
               <p><strong>Mots probablement hors-niveau :</strong> {diagnostic.motsHorsNiveau.join(', ')}</p>
               <p style={{ fontSize: '12px', color: 'var(--text3)' }}>
-                Corpus de référence français (Manulex), pas belge : un mot spécifiquement FWB
-                (nonante, farde, essuie…) peut ne jamais être signalé, faute d'être présent dans ces
-                données — l'absence de signalement ne garantit pas qu'un mot est connu.
+                Corpus de référence français (Manulex), pas belge : les belgicismes reconnus
+                (nonante, farde, essuie…) sont exclus de ce signalement via une liste de mots
+                régionaux (BDLP-Belgique, UCLouvain), mais un mot commun aux deux variétés dont la
+                fréquence scolaire diffère sans être un belgicisme répertorié peut encore échapper à
+                la détection — l'absence de signalement ne garantit pas qu'un mot est connu.
               </p>
             </div>
           )}

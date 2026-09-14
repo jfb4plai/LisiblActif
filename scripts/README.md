@@ -46,3 +46,34 @@ Manulex ne le permet pas — il faudrait une autre base lexicale couvrant ces
 niveaux (voir par exemple FLELex pour le vocabulaire FLE, mentionné comme
 piste d'extension non encore vérifiée RISS). Ne pas extrapoler les données
 Manulex au-delà de P3 : ce serait présenter comme mesuré ce qui ne l'est pas.
+
+---
+
+# Import des belgicismes (BDLP-Belgique)
+
+`src/data/belgicismes.json` corrige un angle mort de Manulex (corpus
+français) : un mot belge courant (nonante, farde, bourgmestre...) que Manulex
+classe à tort comme rare/avancé n'est plus signalé comme "hors-niveau" — voir
+le commentaire dans `src/lib/manulex.js` (fonction `estConnuAuNiveau`) pour
+la sémantique exacte (ça évite un faux signalement, ça ne confirme pas un
+niveau).
+
+- **Source** : [bdlp.org/recherche?bases[]=BE](https://www.bdlp.org/recherche?bases[]=BE)
+  — 2143 entrées (mots-vedettes + variantes), 2035 formes normalisées
+  uniques. Produite par le centre Valibel (UCLouvain, dir. Michel Francard),
+  financée par le FNRS et la Communauté Wallonie-Bruxelles.
+- **Licence** : contenu public en ligne, pas de licence ouverte affichée,
+  issu du *Dictionnaire des belgicismes* (Francard et al., De Boeck, 2010).
+  Utilisé comme simple liste de mots (aucune définition ni citation
+  reprise), usage non commercial d'intérêt pédagogique FWB.
+- **Limite** : ce n'est PAS une base de fréquence graduée par année scolaire
+  — impossible d'affirmer "ce mot belge est connu dès P1". Ne sert qu'à
+  éviter un faux positif, pas à en tirer un niveau.
+
+## Ré-exécuter l'import
+
+```bash
+pip install requests   # une fois
+python scripts/import-belgicismes.py
+npm run test && npm run build
+```

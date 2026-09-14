@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { estConnuAuNiveau, detecterMotsHorsNiveau, FREQUENCE_LEXICALE, NIVEAUX_ORDRE } from './manulex'
+import { estConnuAuNiveau, detecterMotsHorsNiveau, FREQUENCE_LEXICALE, BELGICISMES, NIVEAUX_ORDRE } from './manulex'
 
 // Jeu de données isolé pour tester la logique indépendamment du contenu réel
 // de Manulex — un futur ré-import avec un autre seuil de fréquence ne doit
@@ -45,8 +45,28 @@ describe('detecterMotsHorsNiveau', () => {
   })
 
   it('découpe sur les apostrophes pour ne pas fusionner une élision avec le mot suivant', () => {
-    const resultat = detecterMotsHorsNiveau("L'école est fermée", 'P2', { ecole: 'P3' })
+    // belgicismes = new Set() explicite : "école" figure dans la vraie liste
+    // BELGICISMES (BDLP-Belgique), ce test porte sur le découpage, pas sur
+    // l'override belgicisme (testé séparément ci-dessous).
+    const resultat = detecterMotsHorsNiveau("L'école est fermée", 'P2', { ecole: 'P3' }, new Set())
     expect(resultat).toEqual(['école'])
+  })
+})
+
+describe('estConnuAuNiveau — override belgicismes', () => {
+  const DATASET_HORS_NIVEAU = { nonante: 'P3' }
+  const BELGICISMES_TEST = new Set(['nonante'])
+
+  it('un mot classé hors-niveau par le dataset mais présent dans BELGICISMES retombe sur null, pas false', () => {
+    expect(estConnuAuNiveau('nonante', 'P1', DATASET_HORS_NIVEAU, BELGICISMES_TEST)).toBeNull()
+  })
+
+  it('un mot hors-niveau et absent de BELGICISMES reste confirmé false', () => {
+    expect(estConnuAuNiveau('nonante', 'P1', DATASET_HORS_NIVEAU, new Set())).toBe(false)
+  })
+
+  it('un belgicisme déjà connu au niveau cible reste true (le statut belgicisme ne dégrade jamais un résultat positif)', () => {
+    expect(estConnuAuNiveau('nonante', 'P3', DATASET_HORS_NIVEAU, BELGICISMES_TEST)).toBe(true)
   })
 })
 
@@ -66,5 +86,23 @@ describe('FREQUENCE_LEXICALE (corpus Manulex réel)', () => {
     for (const niveau of niveaux) {
       expect(niveau).toMatch(/^P[1-3]$/)
     }
+  })
+})
+
+describe('BELGICISMES (corpus réel BDLP-Belgique)', () => {
+  it('charge une vraie liste de belgicismes, pas un ensemble vide', () => {
+    expect(BELGICISMES.size).toBeGreaterThan(1000)
+  })
+
+  it('contient des belgicismes courants attendus', () => {
+    for (const mot of ['nonante', 'septante', 'farde', 'essuie', 'bourgmestre', 'kot']) {
+      expect(BELGICISMES.has(mot)).toBe(true)
+    }
+  })
+
+  it("cas réel : 'nonante', classé P3 par Manulex (rare en France), n'est plus confirmé hors-niveau à P1", () => {
+    // Sans le correctif belgicisme, ce test échouerait avec `false` — Manulex
+    // classe "nonante" P3 car les manuels français utilisent "quatre-vingt-dix".
+    expect(estConnuAuNiveau('nonante', 'P1')).toBeNull()
   })
 })

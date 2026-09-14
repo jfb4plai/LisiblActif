@@ -6,8 +6,13 @@ const REFERENCES = [
   },
   {
     titre: 'Manulex — Lété, B., Sprenger-Charolles, L. & Colé, P. (2004)',
-    detail: "Base de données de fréquence lexicale calculée sur 54 manuels scolaires FRANÇAIS, pas belges (1,9 million de mots), corpus complet importé sous licence CC BY-NC-SA 3.0 (manulex.org), utilisée pour détecter les mots hors-niveau au primaire (P1-P3). Deux limites à connaître : (1) le calibrage par niveau reflète les programmes scolaires français, pas nécessairement le rythme d'acquisition FWB ; (2) les belgicismes (nonante, septante, farde, essuie...) sont probablement absents du corpus — un mot belge courant peut donc ne jamais être signalé, non pas parce qu'il est jugé connu, mais parce qu'il est simplement absent des données. Manulex ne couvre pas le secondaire : aucune détection de mots hors-niveau n'est possible sur un texte destiné à P4 et au-delà.",
+    detail: "Base de données de fréquence lexicale calculée sur 54 manuels scolaires FRANÇAIS, pas belges (1,9 million de mots), corpus complet importé sous licence CC BY-NC-SA 3.0 (manulex.org), utilisée pour détecter les mots hors-niveau au primaire (P1-P3). Limites à connaître : (1) le calibrage par niveau reflète les programmes scolaires français, pas nécessairement le rythme d'acquisition FWB — corrigé partiellement pour les belgicismes reconnus (voir BDLP-Belgique ci-dessous), mais pas pour un mot commun aux deux variétés dont la fréquence scolaire diffère sans être un belgicisme répertorié. Manulex ne couvre pas le secondaire : aucune détection de mots hors-niveau n'est possible sur un texte destiné à P4 et au-delà.",
     riss: 'Vérifié via Gala, François, Bernhard & Fairon (2014, hal-01001916) et Grossmann (2018, hal-04807000).',
+  },
+  {
+    titre: 'BDLP-Belgique (Base de données lexicographiques panfrancophone, section Belgique)',
+    detail: "2035 formes régionales belges (nonante, septante, farde, essuie, bourgmestre, kot...), produites par le centre Valibel (UCLouvain, dir. Michel Francard), financées par le FNRS et la Communauté Wallonie-Bruxelles, issues du Dictionnaire des belgicismes (Francard et al., De Boeck, 2010). Utilisée pour éviter qu'un mot belge légitime, absent ou mal classé dans Manulex (ex. « nonante », rare en France, classé à tort comme avancé), soit signalé à tort comme hors-niveau. Ce n'est pas une base graduée par année scolaire : elle empêche un faux signalement, elle ne confirme pas un niveau précis.",
+    riss: 'Réel, vérifié directement sur bdlp.org le 2026-09-14 — ressource institutionnelle FWB (FNRS, Communauté Wallonie-Bruxelles, UCLouvain), pas un article du corpus RISS.',
   },
   {
     titre: 'Gala, N., François, T., Bernhard, D. & Fairon, C. (2014)',
