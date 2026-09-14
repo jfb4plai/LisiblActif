@@ -8,11 +8,17 @@
 const VOYELLES = 'aeiouyàâäéèêëïîôöùûüœæ'
 const RE_GROUPES_VOYELLES = new RegExp(`[${VOYELLES}]+`, 'gi')
 
+// Approximation par comptage de groupes vocaliques (pas une syllabation
+// phonétique réelle : ignore le e muet, l'élision, etc.) — suffisant pour
+// la formule de lisibilité, qui utilise cette même convention de comptage.
 export function compterSyllabes(mot) {
   const groupes = mot.match(RE_GROUPES_VOYELLES)
   return groupes ? groupes.length : 1
 }
 
+// Découpage naïf sur .!?… — suppose un texte sans abréviations à points
+// (M., etc., p.ex.) ni nombres décimaux, qui seraient lus à tort comme des
+// fins de phrase et fausseraient le score.
 export function decouperPhrases(texte) {
   return texte
     .replace(/\s+/g, ' ')
