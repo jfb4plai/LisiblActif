@@ -35,9 +35,11 @@ function normaliser(mot) {
 
 // Retourne true/false quand le mot est présent dans le référentiel (connu ou
 // confirmé au-dessus du niveau cible), ou null quand le mot est absent du
-// référentiel — état volontairement distinct de `false` : un mot absent
-// n'est PAS considéré comme rare, faute de données suffisantes dans la liste
-// de démarrage (voir l'avertissement en tête de fichier). C'est ce qui
+// référentiel — état volontairement distinct de `false` : un mot absent n'est
+// PAS considéré comme rare. Même avec le corpus Manulex complet, un mot peut
+// être absent simplement parce qu'il n'apparaît jamais dans un manuel scolaire
+// primaire français (secondaire, vocabulaire très spécialisé...) — voir la
+// limite "P1-P3 uniquement" documentée en tête de fichier. C'est ce qui
 // permet à detecterMotsHorsNiveau de ne signaler que des mots confirmés
 // hors-niveau plutôt que la quasi-totalité d'un texte réel.
 export function estConnuAuNiveau(mot, niveauCible, dataset = FREQUENCE_LEXICALE) {
