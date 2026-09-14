@@ -21,7 +21,17 @@ export default function Login() {
 
     if (mode === 'login') {
       const { error } = await signIn(email, password)
-      if (error) setError('Email ou mot de passe incorrect.')
+      if (error) {
+        // Supabase renvoie un message générique pour les identifiants invalides,
+        // mais toute autre erreur (réseau, projet mal configuré) mérite un
+        // message distinct — sinon un enseignant confronté à une panne croit
+        // s'être trompé de mot de passe.
+        setError(
+          error.message?.toLowerCase().includes('invalid login credentials')
+            ? 'Email ou mot de passe incorrect.'
+            : `Connexion impossible : ${error.message}`
+        )
+      }
       else navigate('/dashboard')
     } else {
       const { error } = await signUp(email, password)
