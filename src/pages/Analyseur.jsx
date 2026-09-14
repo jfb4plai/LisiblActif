@@ -4,6 +4,7 @@ import { scoreKandelMoles, interpreterScore, decouperPhrases } from '../lib/lisi
 import { detecterMotsHorsNiveau } from '../lib/manulex'
 import { tauxDecodabilite, graphemesJusquaEtape, PROGRESSION_CP_DEFAUT } from '../lib/decodabilite'
 import { NIVEAUX_PRIMAIRE, NIVEAUX_SECONDAIRE, seuilPhraseLongue, estNiveauPrecoce } from '../lib/constants'
+import { extractFile } from '../lib/extractFile'
 
 export default function Analyseur() {
   // Réanalyse depuis l'historique : Historique.jsx navigue ici avec
@@ -12,7 +13,20 @@ export default function Analyseur() {
   const [texte, setTexte] = useState(state?.texte ?? '')
   const [niveau, setNiveau] = useState(state?.niveau ?? 'P4')
   const [etapeCP, setEtapeCP] = useState(PROGRESSION_CP_DEFAUT.length)
+  const [erreurImport, setErreurImport] = useState('')
   const navigate = useNavigate()
+
+  async function importerFichier(e) {
+    const fichier = e.target.files?.[0]
+    e.target.value = '' // permet de réimporter le même fichier après une erreur
+    if (!fichier) return
+    setErreurImport('')
+    try {
+      setTexte(await extractFile(fichier))
+    } catch (err) {
+      setErreurImport(err.message)
+    }
+  }
 
   const motsMin = 20
   const nbMots = texte.trim().split(/\s+/).filter(Boolean).length
@@ -87,10 +101,24 @@ export default function Analyseur() {
           placeholder="Ex. : « Le petit chat noir dort sur le tapis du salon. Il attend que sa maîtresse rentre de l'école pour jouer avec sa balle rouge. »"
         />
         <p style={{ fontSize: '13px', color: 'var(--text2)', marginTop: '4px' }}>
-          Collez le texte de lecture ou de dictée à évaluer (minimum {motsMin} mots). Il sert
-          uniquement au diagnostic ci-dessous — rien n'est enregistré tant que vous ne demandez pas
-          explicitement une réécriture et ne l'enregistrez pas dans l'historique.
+          Collez le texte de lecture ou de dictée à évaluer (minimum {motsMin} mots), ou importez-le
+          ci-dessous. Il sert uniquement au diagnostic — rien n'est enregistré tant que vous ne
+          demandez pas explicitement une réécriture et ne l'enregistrez pas dans l'historique.
         </p>
+      </div>
+
+      <div className="plai-field">
+        <label className="plai-label" htmlFor="import-fichier">Importer un fichier (facultatif)</label>
+        <input
+          id="import-fichier" name="import-fichier"
+          className="plai-input" type="file" accept=".docx,.txt"
+          onChange={importerFichier}
+        />
+        <p style={{ fontSize: '13px', color: 'var(--text2)', marginTop: '4px' }}>
+          Formats acceptés : .docx et .txt — le texte extrait remplace le contenu de la zone
+          ci-dessus. Le PDF n'est pas encore pris en charge : copiez son contenu manuellement.
+        </p>
+        {erreurImport && <div className="plai-error" role="alert" style={{ marginTop: '0.5rem' }}>{erreurImport}</div>}
       </div>
 
       {texteTropCourt && (
