@@ -20,6 +20,11 @@ const REFERENCES = [
     riss: 'hal-03811405',
   },
   {
+    titre: 'Boggio, C., Leclercq-Samson, A. & Bosse, M.-L. (2024)',
+    detail: "Complément à l'étude précédente : quelle proportion de mots décodables (faible ou élevée) favorise le mieux l'apprentissage de la lecture — corrobore le seuil de vigilance utilisé pour la décodabilité.",
+    riss: 'hal-04659756',
+  },
+  {
     titre: 'Anagraph (ENS Lyon)',
     detail: "Outil français de calcul de décodabilité pour le CP (1re primaire en FWB). Réel, cité dans le corpus RISS (Deauvieau & Gioia, 2024, halshs-04855104). Pas d'API ni d'export public documenté — LisiblActif construit sa propre table de progression graphème-phonème dans le même esprit scientifique, adaptée au primaire FWB (P1-P3) et éditable par l'enseignant.",
     riss: 'halshs-04855104 (mention) — vérifié directement sur anagraph.ens-lyon.fr le 2026-09-14',
