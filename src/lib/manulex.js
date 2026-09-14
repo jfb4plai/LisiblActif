@@ -6,12 +6,20 @@
 // scripts/import-manulex.py — voir ce script pour le détail du mapping et
 // le seuil de fréquence appliqué.
 //
-// LIMITE — Manulex ne couvre que les manuels de lecture du primaire
-// français (CP à CM2, mappé ici sur P1-P3 FWB ; voir scripts/import-manulex.py
-// pour le détail du mapping et sa limite propre — CE2 à CM2 sont regroupés
-// en une seule tranche, mappée sur P3). Il n'y a AUCUNE donnée secondaire
-// (S1-S6) : estConnuAuNiveau/detecterMotsHorsNiveau ne peuvent détecter des
-// mots hors-niveau que sur des textes destinés au primaire.
+// LIMITES —
+// 1. Corpus FRANÇAIS, pas belge : 54 manuels de lecture du primaire
+//    FRANÇAIS (CP à CM2, mappé ici sur P1-P3 FWB ; voir scripts/import-manulex.py
+//    pour le détail du mapping et sa limite propre — CE2 à CM2 sont regroupés
+//    en une seule tranche, mappée sur P3). Le calibrage par niveau reflète les
+//    programmes scolaires français, pas le rythme d'acquisition FWB. Les
+//    belgicismes (nonante, septante, farde, essuie...) sont probablement
+//    absents du corpus : un mot belge courant ne sera pas flagué, non pas
+//    parce qu'il est jugé connu, mais parce qu'il est absent des données
+//    (voir le commentaire sur la sémantique null/false d'estConnuAuNiveau
+//    plus bas).
+// 2. Aucune donnée secondaire (S1-S6) dans Manulex : estConnuAuNiveau/
+//    detecterMotsHorsNiveau ne peuvent détecter des mots hors-niveau que
+//    sur des textes destinés au primaire.
 //
 // niveau = premier niveau scolaire où le mot est considéré comme fréquent.
 //

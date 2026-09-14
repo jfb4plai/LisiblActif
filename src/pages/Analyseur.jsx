@@ -139,7 +139,14 @@ export default function Analyseur() {
           )}
 
           {diagnostic.motsHorsNiveau.length > 0 && (
-            <p><strong>Mots probablement hors-niveau :</strong> {diagnostic.motsHorsNiveau.join(', ')}</p>
+            <div>
+              <p><strong>Mots probablement hors-niveau :</strong> {diagnostic.motsHorsNiveau.join(', ')}</p>
+              <p style={{ fontSize: '12px', color: 'var(--text3)' }}>
+                Corpus de référence français (Manulex), pas belge : un mot spécifiquement FWB
+                (nonante, farde, essuie…) peut ne jamais être signalé, faute d'être présent dans ces
+                données — l'absence de signalement ne garantit pas qu'un mot est connu.
+              </p>
+            </div>
           )}
 
           {diagnostic.motsHorsNiveau.length === 0 && !NIVEAUX_PRIMAIRE.slice(0, 3).includes(niveau) && (

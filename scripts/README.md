@@ -14,10 +14,18 @@
   Lété, Sprenger-Charolles & Colé (2004) partout où ces données apparaissent
   (déjà fait sur `src/pages/References.jsx`), toute redistribution du jeu de
   données dérivé doit rester sous la même licence.
-- **Limite importante** : Manulex ne couvre que les manuels de lecture du
-  primaire français (CP à CM2). Il n'y a **aucune donnée secondaire**
-  (S1-S6) — `detecterMotsHorsNiveau` ne peut signaler des mots hors-niveau
-  que sur des textes destinés au primaire FWB (P1-P3), jamais au secondaire.
+- **Limites importantes** :
+  - Corpus **français, pas belge** — 54 manuels de lecture du primaire
+    français (CP à CM2). Le calibrage par niveau reflète les programmes
+    scolaires français, pas nécessairement le rythme d'acquisition FWB, et
+    les belgicismes (nonante, septante, farde, essuie...) sont probablement
+    absents du corpus : un mot belge courant ne sera pas signalé, non pas
+    parce qu'il est jugé connu, mais parce qu'il est simplement absent des
+    données Manulex. Aucune base lexicale FWB équivalente n'a été identifiée
+    à ce jour — à rechercher si le sujet redevient prioritaire.
+  - Il n'y a **aucune donnée secondaire** (S1-S6) — `detecterMotsHorsNiveau`
+    ne peut signaler des mots hors-niveau que sur des textes destinés au
+    primaire FWB (P1-P3), jamais au secondaire.
 
 ## Ré-exécuter l'import (si le fichier source est mis à jour par eManulex)
 
