@@ -1,4 +1,4 @@
-create table lisibl_textes (
+create table if not exists lisibl_textes (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references auth.users(id) on delete cascade,
   titre text not null default 'Sans titre',
@@ -19,7 +19,7 @@ create policy "lisibl_textes_owner_update" on lisibl_textes
 create policy "lisibl_textes_owner_delete" on lisibl_textes
   for delete using (auth.uid() = user_id);
 
-create table lisibl_reecritures (
+create table if not exists lisibl_reecritures (
   id uuid primary key default gen_random_uuid(),
   texte_id uuid not null references lisibl_textes(id) on delete cascade,
   texte_reecrit text not null,
