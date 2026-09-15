@@ -9,6 +9,8 @@ export default function Historique() {
   const [error, setError] = useState('')
   const [ouvertId, setOuvertId] = useState(null)
   const [details, setDetails] = useState({}) // id -> { texte_original, reecritures, loading, error }
+  const [confirmationId, setConfirmationId] = useState(null) // id en attente de confirmation de suppression
+  const [suppression, setSuppression] = useState({}) // id -> { loading, error }
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -58,6 +60,27 @@ export default function Historique() {
     navigate('/dashboard', { state: { texte: detail.texteOriginal, niveau: niveauCible } })
   }
 
+  async function supprimer(id) {
+    setSuppression(s => ({ ...s, [id]: { loading: true } }))
+
+    // ON DELETE CASCADE sur lisibl_reecritures.texte_id : supprimer la ligne
+    // lisibl_textes suffit, ses réécritures partent avec elle.
+    const { error } = await supabase.from('lisibl_textes').delete().eq('id', id)
+
+    if (error) {
+      setSuppression(s => ({ ...s, [id]: { loading: false, error: error.message } }))
+      return
+    }
+
+    setTextes(t => t.filter(item => item.id !== id))
+    setConfirmationId(null)
+    setSuppression(s => {
+      const { [id]: _retire, ...reste } = s
+      return reste
+    })
+    if (ouvertId === id) setOuvertId(null)
+  }
+
   if (loading) return <div className="plai-empty" role="status">Chargement…</div>
 
   if (error) {
@@ -80,22 +103,67 @@ export default function Historique() {
       {textes.map(t => {
         const ouvert = ouvertId === t.id
         const detail = details[t.id]
+        const enConfirmation = confirmationId === t.id
+        const etatSuppression = suppression[t.id]
         return (
           <div key={t.id} className="plai-card">
-            <button
-              onClick={() => basculerOuverture(t.id)}
-              aria-expanded={ouvert}
-              style={{ background: 'none', border: 'none', padding: 0, textAlign: 'left', width: '100%', cursor: 'pointer' }}
-            >
-              <p><strong>{t.titre}</strong> — niveau {t.niveau_cible}</p>
-              <p style={{ fontSize: '13px', color: 'var(--text2)' }}>
-                {t.score_lisibilite != null
-                  ? `Score : ${t.score_lisibilite} (${interpreterScore(t.score_lisibilite)})`
-                  : 'Score non disponible'}
-                {' — '}{new Date(t.created_at).toLocaleDateString('fr-BE')}
-                {' — '}{ouvert ? 'Masquer' : 'Voir le texte'}
-              </p>
-            </button>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem' }}>
+              <button
+                onClick={() => basculerOuverture(t.id)}
+                aria-expanded={ouvert}
+                style={{ background: 'none', border: 'none', padding: 0, textAlign: 'left', flex: 1, cursor: 'pointer' }}
+              >
+                <p><strong>{t.titre}</strong> — niveau {t.niveau_cible}</p>
+                <p style={{ fontSize: '13px', color: 'var(--text2)' }}>
+                  {t.score_lisibilite != null
+                    ? `Score : ${t.score_lisibilite} (${interpreterScore(t.score_lisibilite)})`
+                    : 'Score non disponible'}
+                  {' — '}{new Date(t.created_at).toLocaleDateString('fr-BE')}
+                  {' — '}{ouvert ? 'Masquer' : 'Voir le texte'}
+                </p>
+              </button>
+
+              {!enConfirmation && (
+                <button
+                  className="plai-btn-ghost"
+                  style={{ flexShrink: 0, fontSize: '13px', color: 'var(--text3)' }}
+                  onClick={() => setConfirmationId(t.id)}
+                  aria-label={`Supprimer « ${t.titre} »`}
+                >
+                  Supprimer
+                </button>
+              )}
+            </div>
+
+            {enConfirmation && (
+              <div role="alert" style={{ marginTop: '0.75rem', borderTop: '1px solid var(--border)', paddingTop: '0.75rem' }}>
+                <p style={{ fontSize: '14px' }}>
+                  Supprimer définitivement ce texte et ses réécritures enregistrées ? Cette action est irréversible.
+                </p>
+                {etatSuppression?.error && (
+                  <div className="plai-error" role="alert" style={{ marginTop: '0.5rem' }}>
+                    Suppression impossible : {etatSuppression.error}
+                  </div>
+                )}
+                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
+                  <button
+                    className="plai-btn"
+                    style={{ background: '#b91c1c' }}
+                    disabled={etatSuppression?.loading}
+                    onClick={() => supprimer(t.id)}
+                  >
+                    {etatSuppression?.loading ? 'Suppression…' : 'Confirmer la suppression'}
+                  </button>
+                  <button
+                    className="plai-btn-ghost"
+                    disabled={etatSuppression?.loading}
+                    onClick={() => setConfirmationId(null)}
+                  >
+                    Annuler
+                  </button>
+                </div>
+              </div>
+            )}
 
             {ouvert && (
               <div role="status" aria-live="polite" style={{ marginTop: '0.75rem', borderTop: '1px solid var(--border)', paddingTop: '0.75rem' }}>
