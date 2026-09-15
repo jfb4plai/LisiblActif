@@ -26,6 +26,18 @@ describe('motEstDecodable', () => {
   })
 })
 
+describe('graphème nasal "un"', () => {
+  it('"un" fait partie des graphèmes nasaux de la progression par défaut (distinction /ɛ̃/-/œ̃/ active en FWB)', () => {
+    const graphemes = graphemesJusquaEtape(4, PROGRESSION_GRAPHEMES_DEFAUT)
+    expect(graphemes).toContain('un')
+  })
+
+  it('"brun" est décodable avec le seul graphème nasal "un" (sans "u" ni "n" isolés)', () => {
+    expect(motEstDecodable('brun', ['b', 'r', 'un'])).toBe(true)
+    expect(motEstDecodable('brun', ['b', 'r'])).toBe(false)
+  })
+})
+
 describe('graphemesJusquaEtape', () => {
   it('cumule les graphèmes des étapes précédentes', () => {
     const graphemes = graphemesJusquaEtape(2, PROGRESSION_GRAPHEMES_DEFAUT)

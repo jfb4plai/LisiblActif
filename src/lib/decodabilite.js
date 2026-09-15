@@ -11,11 +11,15 @@
 // FWB (P1-P3, voir NIVEAUX_PRECOCES dans constants.js), sans être rattachée
 // à une seule année ; l'enseignant règle lui-même l'étape via le curseur.
 
+// "un" distinct de "in" : la distinction /ɛ̃/-/œ̃/ (brin ≠ brun) reste active
+// en français de Belgique, contrairement au français de France où elle tend
+// à se neutraliser (Dister & Moreau, 2024, « Des phonèmes aux graphèmes »,
+// RISS W4392917637, projet Orthocor financé par la FWB) — public FWB oblige.
 export const PROGRESSION_GRAPHEMES_DEFAUT = [
   { etape: 1, graphemes: ['a', 'i', 'o', 'u', 'l', 'm', 'r'] },
   { etape: 2, graphemes: ['e', 't', 'p', 'n', 'f'] },
   { etape: 3, graphemes: ['s', 'd', 'c', 'v', 'ou'] },
-  { etape: 4, graphemes: ['on', 'an', 'in', 'b', 'j'] },
+  { etape: 4, graphemes: ['on', 'an', 'in', 'un', 'b', 'j'] },
   { etape: 5, graphemes: ['ch', 'qu', 'g', 'eu', 'oi'] },
   { etape: 6, graphemes: ['gn', 'ai', 'au', 'eau', 'ille'] },
 ]
