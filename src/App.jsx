@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import Layout from './components/Layout'
 import Login from './pages/Login'
+import NouveauMotDePasse from './pages/NouveauMotDePasse'
 
 // Chargées à la demande : Analyseur embarque le corpus Manulex complet
 // (~450 Ko de JSON) via lib/manulex.js. Sans ce découpage, ce poids serait
@@ -14,10 +15,18 @@ const Historique = lazy(() => import('./pages/Historique'))
 const References = lazy(() => import('./pages/References'))
 
 function AppRoutes() {
-  const { user, loading } = useAuth()
+  const { user, loading, passwordRecovery } = useAuth()
 
   if (loading) {
     return <div className="plai-empty">Chargement…</div>
+  }
+
+  // Le lien "mot de passe oublié" ouvre une session Supabase valide
+  // (event PASSWORD_RECOVERY) : sans ce garde-fou, l'enseignant atterrirait
+  // directement sur /dashboard sans jamais pouvoir définir son nouveau
+  // mot de passe, quelle que soit la route visée par le lien de l'email.
+  if (passwordRecovery) {
+    return <NouveauMotDePasse />
   }
 
   if (!user) {

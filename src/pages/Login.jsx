@@ -10,7 +10,7 @@ export default function Login() {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [loading, setLoading] = useState(false)
-  const { signIn, signUp } = useAuth()
+  const { signIn, signUp, resetPasswordForEmail } = useAuth()
   const navigate = useNavigate()
 
   async function handleSubmit(e) {
@@ -33,10 +33,17 @@ export default function Login() {
         )
       }
       else navigate('/dashboard')
-    } else {
+    } else if (mode === 'register') {
       const { error } = await signUp(email, password)
       if (error) setError(error.message)
       else setSuccess('Compte créé. Vérifiez votre email pour confirmer votre inscription.')
+    } else {
+      const { error } = await resetPasswordForEmail(email)
+      // Toujours le même message, que l'email existe ou non côté Supabase —
+      // sinon ce formulaire devient un moyen de vérifier quels enseignants
+      // ont un compte (énumération d'emails).
+      if (error) setError(error.message)
+      else setSuccess("Si un compte existe pour cet email, un lien de réinitialisation vient d'être envoyé.")
     }
     setLoading(false)
   }
@@ -65,28 +72,57 @@ export default function Login() {
               placeholder="prenom.nom@etablissement.be"
             />
           </div>
-          <div className="plai-field">
-            <label className="plai-label" htmlFor="password">Mot de passe</label>
-            <input
-              id="password" name="password"
-              autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
-              className="plai-input" type="password" required
-              value={password} onChange={e => setPassword(e.target.value)}
-              placeholder="••••••••"
-            />
-          </div>
+          {mode !== 'forgot' && (
+            <div className="plai-field">
+              <label className="plai-label" htmlFor="password">Mot de passe</label>
+              <input
+                id="password" name="password"
+                autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
+                className="plai-input" type="password" required
+                value={password} onChange={e => setPassword(e.target.value)}
+                placeholder="••••••••"
+              />
+            </div>
+          )}
+          {mode === 'forgot' && (
+            <p style={{ fontSize: '13px', color: 'var(--text2)', marginTop: '-0.5rem', marginBottom: '1rem' }}>
+              Vous recevrez un email avec un lien pour choisir un nouveau mot de passe.
+            </p>
+          )}
           <button className="plai-btn" type="submit" disabled={loading} style={{ width: '100%' }}>
-            {mode === 'login' ? 'Se connecter' : 'Créer mon compte'}
+            {mode === 'login' && 'Se connecter'}
+            {mode === 'register' && 'Créer mon compte'}
+            {mode === 'forgot' && 'Envoyer le lien de réinitialisation'}
           </button>
         </form>
 
+        {mode === 'login' && (
+          <button
+            className="plai-btn-ghost"
+            style={{ width: '100%', marginTop: '0.5rem' }}
+            onClick={() => { setMode('forgot'); setError(''); setSuccess('') }}
+          >
+            Mot de passe oublié ?
+          </button>
+        )}
+
         <button
           className="plai-btn-ghost"
-          style={{ width: '100%', marginTop: '0.75rem' }}
-          onClick={() => setMode(mode === 'login' ? 'register' : 'login')}
+          style={{ width: '100%', marginTop: '0.5rem' }}
+          onClick={() => { setMode(mode === 'register' ? 'login' : 'register'); setError(''); setSuccess('') }}
         >
-          {mode === 'login' ? "Pas encore de compte ? S'inscrire" : 'Déjà un compte ? Se connecter'}
+          {mode === 'register' ? 'Déjà un compte ? Se connecter' : "Pas encore de compte ? S'inscrire"}
         </button>
+
+        {mode === 'forgot' && (
+          <button
+            className="plai-btn-ghost"
+            style={{ width: '100%', marginTop: '0.5rem' }}
+            onClick={() => { setMode('login'); setError(''); setSuccess('') }}
+          >
+            Retour à la connexion
+          </button>
+        )}
       </div>
     </div>
   )
